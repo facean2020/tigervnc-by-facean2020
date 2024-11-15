@@ -214,6 +214,9 @@ int main(int argc, char** argv)
     }
     if (os::mkdir_p(configDir, 0777) == -1) {
       if (errno != EEXIST) {
+        if(configDir == "\0"){
+          fprintf(stderr, "Invalid path");
+        }
         fprintf(stderr, "Could not create VNC config directory \"%s\": %s\n",
                 configDir, strerror(errno));
         exit(1);

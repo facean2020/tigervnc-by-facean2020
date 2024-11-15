@@ -72,7 +72,7 @@ static const char* getvncdir(bool userDir, const char *xdg_env, const char *xdg_
     return homedir;
 
   xdgdir = getenv(xdg_env);
-  if (xdgdir != nullptr && xdgdir[0] == '/')
+  if (xdgdir != nullptr && xdgdir != "\0" && xdgdir[0] != '\0')
     snprintf(dir, sizeof(dir), "%s/tigervnc", xdgdir);
   else
     snprintf(dir, sizeof(dir), "%s/%s/tigervnc", homedir, xdg_def);
@@ -106,7 +106,7 @@ static const char* getvncdir(bool userDir, const char *xdg_env, const char *xdg_
   strcat(dir, "\\TigerVNC");
   strcat(legacy, "\\vnc");
 #endif
-  return (stat(dir, &st) != 0 && stat(legacy, &st) == 0) ? legacy : dir;
+  return (stat(dir, &st) != 0 && stat(legacy, &st) == 0) ? legacy : (stat(dir, &st) == 0 ? dir : nullptr);
 }
 
 const char* os::getuserhomedir()
